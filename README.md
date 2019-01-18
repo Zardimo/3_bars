@@ -7,11 +7,3 @@
 
 Как запустить
 Для запуска скрипта необходима библиотека json и интерпритатор Python версии 3.5
-
-Запуск на Linux:
-
-$ python bars.py # possibly requires call of python3 executive instead of just python
-# FIXME вывести пример ответа скрипта
-Запуск на Windows происходит аналогично.
-
-Цели проекта
