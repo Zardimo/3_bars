@@ -9,36 +9,30 @@ def load_data(filepath):
 
 def get_biggest_bar(bars_dict):
     sorted_size_bar_list = []
-    x = 0
-    while x <= (len(bars_dict['features'])-1):
-        bar_list = bars_dict['features'][x]['properties']['Attributes']
+    for item in range(len(bars_dict['features']) - 1):
+        bar_list = bars_dict['features'][item]['properties']['Attributes']
         sorted_size_bar_list.append(bar_list.copy())
-        x += 1
     return max(sorted_size_bar_list, key=lambda d: d['SeatsCount']).get('Name')
 
 
 def get_smallest_bar(bars_dict):
     sorted_size_bar_list = []
-    x = 0
-    while x <= (len(bars_dict['features'])-1):
-        bar_list = bars_dict['features'][x]['properties']['Attributes']
+    for item in range(len(bars_dict['features']) - 1):
+        bar_list = bars_dict['features'][item]['properties']['Attributes']
         sorted_size_bar_list.append(bar_list.copy())
-        x += 1
     return min(sorted_size_bar_list, key=lambda d: d['SeatsCount']).get('Name')
 
 
 def get_closest_bar(bars_dict, longitude, latitude):
     sorted_close_bar_list = []
-    x = 0
-    while x <= (len(bars_dict['features'])-1):
-        bars_coordinates = bars_dict['features'][x]['geometry']['coordinates']
+    for item in range(len(bars_dict['features']) - 1):
+        bars_coordinates = bars_dict['features'][item]['geometry']['coordinates']
         sorted_close_bar_list.append(bars_coordinates)
-        x += 1
     bar_dict = {}
-    for i in range(len(bars_dict['features'])-1):
-        sorted_coords = (sorted_close_bar_list[i][0] - longitude) ** 2 + \
-                        (sorted_close_bar_list[i][1] - latitude) ** 2
-        bar_name = bars_dict['features'][i]['properties']['Attributes']['Name']
+    for item in range(len(bars_dict['features'])-1):
+        sorted_coords = (sorted_close_bar_list[item][0] - longitude) ** 2 + \
+                        (sorted_close_bar_list[item][1] - latitude) ** 2
+        bar_name = bars_dict['features'][item]['properties']['Attributes']['Name']
         bar_dict[bar_name] = sorted_coords
     return min(bar_dict, key=bar_dict.get)
 
