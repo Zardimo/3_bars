@@ -43,20 +43,22 @@ if __name__ == '__main__':
         bars_dict_list = bars_dict['features']
     except UnicodeDecodeError:
         print("Необходима база данных формата json")
+    print("Какую информацию по барам Москвы Вы хотите получить?"
+          "\n1.Вывести самый большой бар Москвы"
+          "\n2.Вывести самый маленький бар Москвы"
+          "\n3.Вывести ближайший бар")
+    second_question = input("")
+    if second_question == "1":
+        print(get_biggest_bar(bars_dict))
+    elif second_question == "2":
+        print(get_smallest_bar(bars_dict))
+    elif second_question == "3":
+        try:
+            longitude = float(input("Введите долготу: "))
+            latitude = float(input("Введите широту: "))
+        except ValueError:
+            print("Укажите целые, либо дробные числа")
+        else:
+            print(get_closest_bar(bars_dict, longitude, latitude))
     else:
-        print("Какую информацию по барам Москвы Вы хотите получить?  \
-        \n1.Вывести самый большой бар Москвы  \
-        \n2.Вывести самый маленький бар Москвы\n3.Вывести ближайший бар")
-        second_question = input("")
-        if second_question == "1":
-            print(get_biggest_bar(bars_dict))
-        elif second_question == "2":
-            print(get_smallest_bar(bars_dict))
-        elif second_question == "3":
-            try:
-                longitude = float(input("Введите долготу: "))
-                latitude = float(input("Введите широту: "))
-            except ValueError:
-                print("Укажите целые, либо дробные числа")
-            else:
-                print(get_closest_bar(bars_dict, longitude, latitude))
+        print("Выберите один из предложенных вариантов")
