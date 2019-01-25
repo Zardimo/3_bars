@@ -43,6 +43,7 @@ if __name__ == '__main__':
         bars_dict_list = bars_dict['features']
     except UnicodeDecodeError:
         print("Необходима база данных формата json")
+        quit()
     print("Какую информацию по барам Москвы Вы хотите получить?"
           "\n1.Вывести самый большой бар Москвы"
           "\n2.Вывести самый маленький бар Москвы"
@@ -58,7 +59,7 @@ if __name__ == '__main__':
             latitude = float(input("Введите широту: "))
         except ValueError:
             print("Укажите целые, либо дробные числа")
-        else:
-            print(get_closest_bar(bars_dict, longitude, latitude))
+            quit()
+        print(get_closest_bar(bars_dict, longitude, latitude))
     else:
         print("Выберите один из предложенных вариантов")
