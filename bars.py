@@ -41,8 +41,8 @@ if __name__ == '__main__':
     try:
         bars_dict = load_data(argv[1])
         bars_dict_list = bars_dict['features']
-    except UnicodeDecodeError:
-        print("Необходима база данных формата json")
+    except Exception:
+        print("Неверно указан путь файла")
         quit()
     print("Какую информацию по барам Москвы Вы хотите получить?"
           "\n1.Вывести самый большой бар Москвы"
@@ -61,5 +61,3 @@ if __name__ == '__main__':
             print("Укажите целые, либо дробные числа")
             quit()
         print(get_closest_bar(bars_dict, longitude, latitude))
-    else:
-        print("Выберите один из предложенных вариантов")
