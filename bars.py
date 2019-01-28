@@ -1,8 +1,11 @@
 import json
+import os
 from sys import argv
 
 
 def load_data(filepath):
+    if not os.path.exists(filepath):
+        return None
     with open(filepath, 'r', encoding='utf-8') as info_bars:
         return json.load(info_bars)
 
@@ -24,6 +27,12 @@ def get_smallest_bar(bars_dict):
 
 
 def get_closest_bar(bars_dict, longitude, latitude):
+    try:
+        longitude = float(input("Введите долготу: "))
+        latitude = float(input("Введите широту: "))
+    except ValueError:
+        print("Укажите целые, либо дробные числа")
+        quit()
     sort_close_bar_list = []
     for numbers_of_bar in bars_dict_list:
         bars_coordinates = numbers_of_bar['geometry']['coordinates']
@@ -38,12 +47,11 @@ def get_closest_bar(bars_dict, longitude, latitude):
 
 
 if __name__ == '__main__':
-    try:
-        bars_dict = load_data(argv[1])
-        bars_dict_list = bars_dict['features']
-    except Exception:
+    bars_dict = load_data(argv[1])
+    if bars_dict is None:
         print("Неверно указан путь файла")
         quit()
+    bars_dict_list = bars_dict['features']
     print("Какую информацию по барам Москвы Вы хотите получить?"
           "\n1.Вывести самый большой бар Москвы"
           "\n2.Вывести самый маленький бар Москвы"
@@ -54,10 +62,6 @@ if __name__ == '__main__':
     elif second_question == "2":
         print(get_smallest_bar(bars_dict))
     elif second_question == "3":
-        try:
-            longitude = float(input("Введите долготу: "))
-            latitude = float(input("Введите широту: "))
-        except ValueError:
-            print("Укажите целые, либо дробные числа")
-            quit()
+        longitude = 0
+        latitude = 0
         print(get_closest_bar(bars_dict, longitude, latitude))
