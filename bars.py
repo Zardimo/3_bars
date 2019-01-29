@@ -22,15 +22,19 @@ def get_smallest_bar(bars):
 
 
 def get_closest_bar(bars, longitude, latitude):
+    try:
+        longitude = float(input("Введите долготу: "))
+        latitude = float(input("Введите широту: "))
+    except ValueError:
+        print("Укажите целые, либо дробные числа")
+        raise SystemExit
     number_name = min(bars, key=lambda
-                      x: calc_coords(x["geometry"]["coordinates"][0],
-                                     longitude,
-                                     x["geometry"]["coordinates"][1],
-                                     latitude))
+                      x: coords(x["geometry"]["coordinates"][0], longitude,
+                                x["geometry"]["coordinates"][1], latitude))
     return number_name
 
 
-def calc_coords(x, x1, y, y1):
+def coords(x, x1, y, y1):
     delta_x = (x-x1)**2
     delta_y = (y-y1)**2
     return delta_x+delta_y
@@ -52,11 +56,7 @@ if __name__ == "__main__":
     elif second_question == "2":
         print(get_smallest_bar(bars)["properties"]["Attributes"]["Name"])
     elif second_question == "3":
-        try:
-            longitude = float(input("Введите долготу: "))
-            latitude = float(input("Введите широту: "))
-        except ValueError:
-            print("Укажите целые, либо дробные числа")
-            raise SystemExit
+        longitude = 0
+        latitude = 0
         print(get_closest_bar(bars, longitude,
                               latitude)["properties"]["Attributes"]["Name"])
