@@ -43,17 +43,16 @@ def coords(x, x1, y, y1):
 if __name__ == "__main__":
     try:
         bars = load_data(argv[1])["features"]
+        print("Какую информацию по барам Москвы Вы хотите получить?"
+              "\n1.Вывести самый большой бар Москвы"
+              "\n2.Вывести самый маленький бар Москвы"
+              "\n3.Вывести ближайший бар")
+        second_question = int(input('Выберите опцию: '))
+        map = {
+            1: get_biggest_bar,
+            2: get_smallest_bar,
+            3: get_closest_bar
+        }
+        print(map[second_question](bars)["properties"]["Attributes"]["Name"])
     except IndexError:
-        print("Укажите месторасположение БД")
-        raise SystemExit
-    print("Какую информацию по барам Москвы Вы хотите получить?"
-          "\n1.Вывести самый большой бар Москвы"
-          "\n2.Вывести самый маленький бар Москвы"
-          "\n3.Вывести ближайший бар")
-    second_question = int(input('Выберите опцию: '))
-    map = {
-        1: get_biggest_bar,
-        2: get_smallest_bar,
-        3: get_closest_bar
-    }
-    print(map[second_question](bars)["properties"]["Attributes"]["Name"])
+        print("Укажите верный путь к файлу")
