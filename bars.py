@@ -5,7 +5,8 @@ from sys import argv
 
 def load_data(filepath):
     if not os.path.exists(filepath):
-        return None
+        print("Неверно указан путь файла")
+        raise SystemExit
     with open(filepath, "r", encoding="utf-8") as info_bars:
         return json.load(info_bars)
 
@@ -21,12 +22,6 @@ def get_smallest_bar(bars):
 
 
 def get_closest_bar(bars, longitude, latitude):
-    try:
-        longitude = float(input("Введите долготу: "))
-        latitude = float(input("Введите широту: "))
-    except ValueError:
-        print("Укажите целые, либо дробные числа")
-        raise SystemExit
     number_name = min(bars, key=lambda
                       x: calc_coords(x["geometry"]["coordinates"][0],
                                      longitude,
@@ -43,12 +38,9 @@ def calc_coords(x, x1, y, y1):
 
 if __name__ == "__main__":
     try:
-        bars = load_data(argv[1])
+        bars = load_data(argv[1])["features"]
     except IndexError:
         print("Укажите месторасположение БД")
-        raise SystemExit
-    if bars is None:
-        print("Неверно указан путь файла")
         raise SystemExit
     print("Какую информацию по барам Москвы Вы хотите получить?"
           "\n1.Вывести самый большой бар Москвы"
@@ -56,14 +48,15 @@ if __name__ == "__main__":
           "\n3.Вывести ближайший бар")
     second_question = input("")
     if second_question == "1":
-        print(get_biggest_bar(
-               bars['features'])['properties']['Attributes']['Name'])
+        print(get_biggest_bar(bars)["properties"]["Attributes"]["Name"])
     elif second_question == "2":
-        print(get_smallest_bar(
-               bars['features'])['properties']['Attributes']['Name'])
+        print(get_smallest_bar(bars)["properties"]["Attributes"]["Name"])
     elif second_question == "3":
-        longitude = 0
-        latitude = 0
-        print(get_closest_bar(bars['features'],
-                              longitude,
-                              latitude)['properties']['Attributes']['Name'])
+        try:
+            longitude = float(input("Введите долготу: "))
+            latitude = float(input("Введите широту: "))
+        except ValueError:
+            print("Укажите целые, либо дробные числа")
+            raise SystemExit
+        print(get_closest_bar(bars, longitude,
+                              latitude)["properties"]["Attributes"]["Name"])
