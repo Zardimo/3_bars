@@ -21,13 +21,9 @@ def get_smallest_bar(bars):
                d: d["properties"]["Attributes"]["SeatsCount"])
 
 
-def get_closest_bar(bars, longitude, latitude):
-    try:
-        longitude = float(input("Введите долготу: "))
-        latitude = float(input("Введите широту: "))
-    except ValueError:
-        print("Укажите целые, либо дробные числа")
-        raise SystemExit
+def get_closest_bar(bars):
+    longitude = float(input("Введите долготу: "))
+    latitude = float(input("Введите широту: "))
     number_name = min(bars, key=lambda
                       x: coords(x["geometry"]["coordinates"][0], longitude,
                                 x["geometry"]["coordinates"][1], latitude))
@@ -43,6 +39,8 @@ def coords(x, x1, y, y1):
 if __name__ == "__main__":
     try:
         bars = load_data(argv[1])["features"]
+        longitude = 0
+        latitude = 0
         print("Какую информацию по барам Москвы Вы хотите получить?"
               "\n1.Вывести самый большой бар Москвы"
               "\n2.Вывести самый маленький бар Москвы"
@@ -56,3 +54,5 @@ if __name__ == "__main__":
         print(map[second_question](bars)["properties"]["Attributes"]["Name"])
     except IndexError:
         print("Укажите верный путь к файлу")
+    except ValueError:
+        print("Укажите целые, либо дробные числа")
