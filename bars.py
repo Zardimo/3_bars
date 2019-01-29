@@ -50,13 +50,10 @@ if __name__ == "__main__":
           "\n1.Вывести самый большой бар Москвы"
           "\n2.Вывести самый маленький бар Москвы"
           "\n3.Вывести ближайший бар")
-    second_question = input("")
-    if second_question == "1":
-        print(get_biggest_bar(bars)["properties"]["Attributes"]["Name"])
-    elif second_question == "2":
-        print(get_smallest_bar(bars)["properties"]["Attributes"]["Name"])
-    elif second_question == "3":
-        longitude = 0
-        latitude = 0
-        print(get_closest_bar(bars, longitude,
-                              latitude)["properties"]["Attributes"]["Name"])
+    second_question = int(input('Выберите опцию: '))
+    map = {
+        1: get_biggest_bar,
+        2: get_smallest_bar,
+        3: get_closest_bar
+    }
+    print(map[second_question](bars)["properties"]["Attributes"]["Name"])
