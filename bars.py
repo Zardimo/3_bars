@@ -6,62 +6,64 @@ from sys import argv
 def load_data(filepath):
     if not os.path.exists(filepath):
         return None
-    with open(filepath, 'r', encoding='utf-8') as info_bars:
+    with open(filepath, "r", encoding="utf-8") as info_bars:
         return json.load(info_bars)
 
 
-def get_biggest_bar(bars_dict):
-    sorted_size_bar_list = []
-    for numbers_of_bar in bars_dict_list:
-        sorted_size_bar_list.append(numbers_of_bar)
-    return max(sorted_size_bar_list, key=lambda
-               d: d['properties']['Attributes']['SeatsCount'])
+def get_biggest_bar(bars):
+    return max(bars, key=lambda
+               d: d["properties"]["Attributes"]["SeatsCount"])
 
 
-def get_smallest_bar(bars_dict):
-    sorted_size_bar_list = []
-    for numbers_of_bar in bars_dict_list:
-        sorted_size_bar_list.append(numbers_of_bar)
-    return min(sorted_size_bar_list, key=lambda
-               d: d['properties']['Attributes']['SeatsCount'])
+def get_smallest_bar(bars):
+    return min(bars, key=lambda
+               d: d["properties"]["Attributes"]["SeatsCount"])
 
 
-def get_closest_bar(bars_dict, longitude, latitude):
+def get_closest_bar(bars, longitude, latitude):
     try:
         longitude = float(input("Введите долготу: "))
         latitude = float(input("Введите широту: "))
     except ValueError:
         print("Укажите целые, либо дробные числа")
-        quit()
-    sort_close_bar_list = []
-    for numbers_of_bar in bars_dict_list:
-        bars_coordinates = numbers_of_bar['geometry']['coordinates']
-        sort_close_bar_list.append(bars_coordinates)
-    bar_dict = {}
-    for num_bar in range(len(bars_dict_list)):
-        sorted_coords = (sort_close_bar_list[num_bar][0] - longitude) ** 2 + \
-                        (sort_close_bar_list[num_bar][1] - latitude) ** 2
-        bar_dict[num_bar] = sorted_coords
-        number_name = min(bar_dict, key=bar_dict.get)
-    return bars_dict_list[number_name]
+        raise SystemExit
+    number_name = min(bars, key=lambda
+                      x: calc_coords(x["geometry"]["coordinates"][0],
+                                     longitude,
+                                     x["geometry"]["coordinates"][1],
+                                     latitude))
+    return number_name
 
 
-if __name__ == '__main__':
-    bars_dict = load_data(argv[1])
-    if bars_dict is None:
+def calc_coords(x, x1, y, y1):
+    delta_x = (x-x1)**2
+    delta_y = (y-y1)**2
+    return delta_x+delta_y
+
+
+if __name__ == "__main__":
+    try:
+        bars = load_data(argv[1])
+    except IndexError:
+        print("Укажите месторасположение БД")
+        raise SystemExit
+    if bars is None:
         print("Неверно указан путь файла")
-        quit()
-    bars_dict_list = bars_dict['features']
+        raise SystemExit
     print("Какую информацию по барам Москвы Вы хотите получить?"
           "\n1.Вывести самый большой бар Москвы"
           "\n2.Вывести самый маленький бар Москвы"
           "\n3.Вывести ближайший бар")
     second_question = input("")
     if second_question == "1":
-        print(get_biggest_bar(bars_dict))
+        print(get_biggest_bar(
+               bars['features'])['properties']['Attributes']['Name'])
     elif second_question == "2":
-        print(get_smallest_bar(bars_dict))
+        print(get_smallest_bar(
+               bars['features'])['properties']['Attributes']['Name'])
     elif second_question == "3":
         longitude = 0
         latitude = 0
-        print(get_closest_bar(bars_dict, longitude, latitude))
+        print(get_closest_bar(bars['features'],
+                              longitude,
+                              latitude)['properties']['Attributes']['Name'])
