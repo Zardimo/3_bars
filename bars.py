@@ -4,6 +4,8 @@ from sys import argv
 
 
 def load_data(filepath):
+    if not os.path.exists(filepath):
+        return None
     with open(filepath, "r", encoding="utf-8") as file_bars:
         return json.load(file_bars)
 
@@ -34,12 +36,8 @@ def calculate_coords(x, x1, y, y1):
 
 
 if __name__ == "__main__":
-    try:
-        bars = load_data(argv[1])
-    except IndexError:
-        print("Укажите путь к файлу")
-        raise SystemExit
-    except FileNotFoundError:
+    bars = load_data(argv[1])
+    if bars is None:
         print("Укажите верный путь к файлу")
         raise SystemExit
     print("Самый большой бар: ")
