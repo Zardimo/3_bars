@@ -52,11 +52,11 @@ if __name__ == "__main__":
           "\n1.Вывести самый большой бар Москвы"
           "\n2.Вывести самый маленький бар Москвы"
           "\n3.Вывести ближайший бар")
-    second_question = input("Выберите опцию: ")
+    question = input("Выберите опцию: ")
     try:
-        if second_question == "3":
+        if question == "3":
             longitude = float(input("Введите долготу: "))
             latitude = float(input("Введите широту: "))
-        print(option_map[second_question](bars)["properties"]["Attributes"]["Name"])
+        print(option_map[question](bars)["properties"]["Attributes"]["Name"])
     except ValueError:
         print("Укажите целые, либо дробные числа")
