@@ -4,9 +4,10 @@ from sys import argv
 
 
 def load_data(filepath):
-    if os.path.exists(filepath):
-        with open(filepath, "r", encoding="utf-8") as file_bars:
-            return json.load(file_bars)
+    if not os.path.exists(filepath):
+        return None
+    with open(filepath, "r", encoding="utf-8") as file_bars:
+        return json.load(file_bars)
 
 
 def get_biggest_bar(bars):
