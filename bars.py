@@ -4,6 +4,8 @@ from sys import argv
 
 
 def load_data(filepath):
+    if not os.path.exists(filepath):
+        return None
     with open(filepath, "r", encoding="utf-8") as file_bars:
         return json.load(file_bars)
 
@@ -39,23 +41,17 @@ if __name__ == "__main__":
     except IndexError:
         print("Укажите путь к файлу")
         raise SystemExit
-    except FileNotFoundError:
+    if bars is None:
         print("Укажите верный путь к файлу")
         raise SystemExit
-    option_map = {
-        "1": get_biggest_bar,
-        "2": get_smallest_bar,
-        "3": get_closest_bar
-    }
-    print("Какую информацию по барам Москвы Вы хотите получить?"
-          "\n1.Вывести самый большой бар Москвы"
-          "\n2.Вывести самый маленький бар Москвы"
-          "\n3.Вывести ближайший бар")
-    question = input("Выберите опцию: ")
+    print("Самый большой бар: ")
+    print(get_biggest_bar(bars)["properties"]["Attributes"]["Name"])
+    print("Самый маленький бар: ")
+    print(get_smallest_bar(bars)["properties"]["Attributes"]["Name"])
+    print("Для нахождения ближайшего бара необходимо ввести координаты")
     try:
-        if question == "3":
-            longitude = float(input("Введите долготу: "))
-            latitude = float(input("Введите широту: "))
-        print(option_map[question](bars)["properties"]["Attributes"]["Name"])
+        longitude = float(input("Введите долготу: "))
+        latitude = float(input("Введите широту: "))
+        print(get_closest_bar(bars)["properties"]["Attributes"]["Name"])
     except ValueError:
         print("Укажите целые, либо дробные числа")
