@@ -11,17 +11,17 @@ def load_data(filepath):
 
 
 def get_biggest_bar(bars):
-    return max(bars["features"], key=lambda
+    return max(bars, key=lambda
                d: d["properties"]["Attributes"]["SeatsCount"])
 
 
 def get_smallest_bar(bars):
-    return min(bars["features"], key=lambda
+    return min(bars, key=lambda
                d: d["properties"]["Attributes"]["SeatsCount"])
 
 
 def get_closest_bar(bars):
-    number_name = min(bars["features"], key=lambda
+    number_name = min(bars, key=lambda
                       x: calculate_coords(x["geometry"]["coordinates"][0],
                       longitude,
                       x["geometry"]["coordinates"][1],
@@ -36,18 +36,22 @@ def calculate_coords(x, x1, y, y1):
 
 
 if __name__ == "__main__":
-    bars = load_data(argv[1])
-    if bars is None:
-        print("Укажите верный путь к файлу")
-        raise SystemExit
-    print("Самый большой бар: ")
-    print(get_biggest_bar(bars)["properties"]["Attributes"]["Name"])
-    print("Самый маленький бар: ")
-    print(get_smallest_bar(bars)["properties"]["Attributes"]["Name"])
+    try:
+        bars_dict = load_data(argv[1])
+    except IndexError:
+        exit("Укажите путь к файлу")
+    if not bars_dict:
+        exit("Укажите верный путь к файлу")
+    bars = bars_dict["features"]
+    print("Самый большой бар: {}".format(
+        get_biggest_bar(bars)["properties"]["Attributes"]["Name"]))
+    print("Самый маленький бар: {}".format(
+        get_smallest_bar(bars)["properties"]["Attributes"]["Name"]))
     print("Для нахождения ближайшего бара необходимо ввести координаты")
     try:
         longitude = float(input("Введите долготу: "))
         latitude = float(input("Введите широту: "))
-        print(get_closest_bar(bars)["properties"]["Attributes"]["Name"])
+        print("Ближайший бар: {}".format(
+            get_closest_bar(bars)["properties"]["Attributes"]["Name"]))
     except ValueError:
         print("Укажите целые, либо дробные числа")
