@@ -60,13 +60,11 @@ if __name__ == "__main__":
         get_smallest_bar(bars)["properties"]["Attributes"]["Name"]))
     print("Для нахождения ближайшего бара необходимо ввести координаты")
     try:
-        longitude = float(input("Введите долготу: "))
-        latitude = float(input("Введите широту: "))
         print("Ближайший бар: {}".format(
             get_closest_bar(
                 bars,
-                longitude,
-                latitude)["properties"]["Attributes"]["Name"]
+                float(input("Введите долготу: ")),
+                float(input("Введите широту: ")))["properties"]["Attributes"]["Name"]
              )
         )
     except ValueError:
