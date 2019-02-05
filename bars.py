@@ -7,9 +7,6 @@ from sys import argv
 def load_data(filepath):
     if not os.path.exists(filepath):
         return None
-    fileway, file_format = os.path.splitext(filepath)
-    if file_format != ".json":
-        return None
     with open(filepath, "r", encoding="utf-8") as file_bars:
         return json.load(file_bars)
 
@@ -50,7 +47,10 @@ def calculate_coords(x, x1, y, y1):
 if __name__ == "__main__":
     if not len(sys.argv) > 1:
         exit("Укажите путь к файлу")
-    bars_dict = load_data(argv[1])
+    try:
+        bars_dict = load_data(argv[1])
+    except ValueError:
+        exit("Укажите верный файл")
     if not bars_dict:
         exit("Укажите верный путь к файлу")
     bars = bars_dict["features"]
