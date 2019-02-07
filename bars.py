@@ -7,8 +7,11 @@ from sys import argv
 def load_data(filepath):
     if not os.path.exists(filepath):
         return None
-    with open(filepath, "r", encoding="utf-8") as file_bars:
-        return json.load(file_bars)
+    try:
+        with open(filepath, "r", encoding="utf-8") as file_bars:
+            return json.load(file_bars)
+    except ValueError:
+        return None
 
 
 def get_biggest_bar(bars):
@@ -47,10 +50,7 @@ def calculate_coords(x, x1, y, y1):
 if __name__ == "__main__":
     if not len(sys.argv) > 1:
         exit("Укажите путь к файлу")
-    try:
-        bars_dict = load_data(argv[1])
-    except ValueError:
-        exit("Укажите верный файл")
+    bars_dict = load_data(argv[1])
     if not bars_dict:
         exit("Укажите верный путь к файлу")
     bars = bars_dict["features"]
